@@ -31,25 +31,25 @@ def date_compare(date1, date2):
     return int(d)
 
 
-def cleanup_ebs_snapshots(region, days):
-    date_now = str(datetime.datetime.now().strftime('%Y-%m-%d'))
+def cleanup_ebs_snapshots(aws_region, days):
     try:
-        ec2 = boto.ec2.connect_to_region(region)
-        ebs_volumes = ec2.get_all_volumes()
-        for ebs_volume in ebs_volumes:
-            print ebs_volume
-            for snapshot in ebs_volume.snapshots():
-                ss_time = str(snapshot.start_time).split("T")
-                date_delta = date_compare(ss_time[0], date_now)
-                if date_delta > days:
-                    print "Deleting " + snapshot.id
-                    ec2.delete_snapshot(snapshot.id)
-            print ""
-    except KeyboardInterrupt:
-        sys.exit(0)
-    except Exception, e:
+        print "Checking " + aws_region + " snapshots >= " + str(days) + " days"
+        ec2 = boto.ec2.connect_to_region(aws_region)
+        ebs_snapshots = ec2.get_all_snapshots(owner=['self'])
+        for ebs_ss in ebs_snapshots:
+            try:
+                date_now = str(datetime.datetime.now().strftime('%Y-%m-%d'))
+                snapshot_time = str(ebs_ss.start_time).split("T")
+                date_delta = date_compare(snapshot_time[0], date_now)
+                if date_delta >= days:
+                    print "Deleting " ebs_ss.id
+                    ec2.delete_snapshot(ebs_ss.id)
+            except Exception, e:
+                print e.response
         return
-    return
+    except Exception, e:
+        print e
+        return
 
 if __name__ == '__main__':
 
@@ -67,12 +67,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.region:
-        regions = []
-        regions.append(args.region)
+        aws_regions = []
+        aws_regions.append(args.region)
     else:
-        regions = get_regions()
+        aws_regions = get_regions()
 
-    for region in regions:
-        print("Region : {}".format(region))
-        cleanup_ebs_snapshots(region, args.days)
-        print("\n")
+    for aws_region in aws_regions:
+        cleanup_ebs_snapshots(aws_region, args.days)
+        print "\n"
