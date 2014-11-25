@@ -1,10 +1,15 @@
 #!/usr/bin/python
 
 """
-housekeeping_cleanup_ebs_snapshots.py
+housekeeping_ebs_snapshots.py
 -------------------------------------
-Delete any snapshots across all AWS regions or
-specified region older than given age in days.
+default: List and delete EBS snapshots
+in AWS account by age.
+
+arguments: 
+  --delete : deletes snapshot
+  --region : run in specified AWS region
+  --days   : snapshots => to delete
 """
 
 import boto.ec2
@@ -31,9 +36,8 @@ def date_compare(date1, date2):
     return int(d)
 
 
-def cleanup_ebs_snapshots(aws_region, days):
+def snapshots(aws_region, days, ss_delete):
     try:
-        print "Checking " + aws_region + " snapshots >= " + str(days) + " days"
         ec2 = boto.ec2.connect_to_region(aws_region)
         ebs_snapshots = ec2.get_all_snapshots(owner=['self'])
         for ebs_ss in ebs_snapshots:
@@ -42,14 +46,20 @@ def cleanup_ebs_snapshots(aws_region, days):
                 snapshot_time = str(ebs_ss.start_time).split("T")
                 date_delta = date_compare(snapshot_time[0], date_now)
                 if date_delta >= days:
-                    print "Deleting " ebs_ss.id
-                    ec2.delete_snapshot(ebs_ss.id)
+                    print ebs_ss.id
+                    if ss_delete:
+       			try:
+                            ec2.delete_snapshot(ebs_ss.id) 
+			    print "deleting.\n"
+            		except Exception, e:
+                            print e.response
             except Exception, e:
-                print e.response
-        return
+                print e
+    except KeyboardInterrupt:
+        sys.exit(0)
     except Exception, e:
         print e
-        return
+    return
 
 if __name__ == '__main__':
 
@@ -60,9 +70,14 @@ if __name__ == '__main__':
         type=str)
     parser.add_argument(
         "--days",
-        help="AWS Region",
+        help="Number of days",
         default=7,
         type=int)
+    parser.add_argument(
+        "--delete",
+        action='store_true',
+	help='delete valid snapshots'
+	)
 
     args = parser.parse_args()
 
@@ -73,5 +88,7 @@ if __name__ == '__main__':
         aws_regions = get_regions()
 
     for aws_region in aws_regions:
-        cleanup_ebs_snapshots(aws_region, args.days)
-        print "\n"
+        print "AWS Region: ", aws_region
+        snapshots(aws_region, args.days, args.delete)
+        print ""
+
