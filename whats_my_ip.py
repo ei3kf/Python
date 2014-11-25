@@ -7,7 +7,6 @@ whats_my_ip : returns your IP address
 import urllib
 import re
 import sys
-import argparse
 
 
 def my_ip():
