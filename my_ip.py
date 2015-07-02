@@ -44,12 +44,22 @@ def check_my_ip(my_region, my_ip_address, my_security_group):
 
 def add_my_ip(my_region, my_ip_address, my_security_group):
     ec2 = boto.ec2.connect_to_region(my_region)
-    rule = ec2.authorize_security_group(group_id=my_security_group,ip_protocol="-1", from_port=-1 , to_port=-1, cidr_ip=my_ip_address) 
+    rule = ec2.authorize_security_group(
+	group_id=my_security_group,
+	ip_protocol="-1", 
+	from_port=-1,
+	to_port=-1,
+	cidr_ip=my_ip_address) 
     return
   
 def delete_my_ip(my_region, my_ip_address, my_security_group):
     ec2 = boto.ec2.connect_to_region(my_region)
-    rule = ec2.revoke_security_group(group_id=my_security_group,ip_protocol="-1", from_port=-1 , to_port=-1, cidr_ip=my_ip_address) 
+    rule = ec2.revoke_security_group(
+	group_id=my_security_group,
+	ip_protocol="-1",
+	from_port=-1,
+	to_port=-1,
+	cidr_ip=my_ip_address) 
     return
 
 def get_ip(http_response):
@@ -106,8 +116,8 @@ if __name__ == "__main__":
    
     try:
         if args.check:
-	        print "Checking for " + my_ip_address + " in " + my_security_group
-                check_my_ip(my_region, my_ip_address, my_security_group)
+            print "Checking for " + my_ip_address + " in " + my_security_group
+            check_my_ip(my_region, my_ip_address, my_security_group)
         elif args.ip:
             print "Your IP address is " + my_ip_address
         elif args.add:
@@ -121,6 +131,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 	sys.exit(0)
     except Exception, e:
-        print e
-
-
+        print "Computer says " + e
