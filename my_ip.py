@@ -4,7 +4,8 @@
 my_ip.py
  - check if my IP address is in my AWS Security Group.
  - add my IP address to my AWS Security Group.
- - delete my IP address to my AWS Security Group.
+ - delete my IP address from my AWS Security Group.
+ - display current IPs in my AWS Security Group.
 """
 
 import urllib
@@ -42,6 +43,17 @@ def check_my_ip(my_region, my_ip_address, my_security_group):
     print my_ip_address + " NOT found in " + my_security_group
     return
 
+
+def display_my_security_group(my_region,my_security_group):
+    ec2 = boto.ec2.connect_to_region(my_region)
+    security_group = ec2.get_all_security_groups(group_ids=my_security_group)
+    for sg in security_group:
+        for rule in sg.rules:
+            for ip in rule.grants:
+	        print ip
+    return
+
+
 def add_my_ip(my_region, my_ip_address, my_security_group):
     ec2 = boto.ec2.connect_to_region(my_region)
     rule = ec2.authorize_security_group(
@@ -52,6 +64,7 @@ def add_my_ip(my_region, my_ip_address, my_security_group):
 	cidr_ip=my_ip_address) 
     return
   
+
 def delete_my_ip(my_region, my_ip_address, my_security_group):
     ec2 = boto.ec2.connect_to_region(my_region)
     rule = ec2.revoke_security_group(
@@ -61,6 +74,7 @@ def delete_my_ip(my_region, my_ip_address, my_security_group):
 	to_port=-1,
 	cidr_ip=my_ip_address) 
     return
+
 
 def get_ip(http_response):
     response_ip = re.findall(r"\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}", http_response)
@@ -81,6 +95,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--check",
         help="Is my IP address already in my Security Group?",
+        action='store_true',
+        default=False)
+
+    parser.add_argument(
+        "--show",
+        help="Show IPs in my Security Group",
         action='store_true',
         default=False)
 
@@ -118,6 +138,9 @@ if __name__ == "__main__":
         if args.check:
             print "Checking for " + my_ip_address + " in " + my_security_group
             check_my_ip(my_region, my_ip_address, my_security_group)
+	elif args.show:
+	    print "Displaying IPs in " + my_security_group
+	    display_my_security_group(my_region,my_security_group)
         elif args.ip:
             print "Your IP address is " + my_ip_address
         elif args.add:
