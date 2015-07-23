@@ -110,7 +110,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--region",
         help="AWS Region",
-        default="eu-west-1",
+        required=True,
         type=str)
 
     parser.add_argument(
@@ -134,13 +134,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--sg",
         help="My Security Group",
-        action='store_true',
-        default="sg-284ea747")
+        required=True,
+        type=str)
 
     parser.add_argument(
        "--ip",
         help="Display my IP Address.",
-        action='store_true',
+        type=str,
         default=False)
 
     add_delete = parser.add_mutually_exclusive_group()
@@ -194,5 +194,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         sys.exit(0)
     except Exception, e:
-        print "Computer says " + e
+        str(e)
+        print("Computer says: {}").format(e)
 
