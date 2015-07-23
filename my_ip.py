@@ -61,7 +61,7 @@ def display_my_security_group(my_region,my_security_group):
     for sg in security_group:
         for rule in sg.rules:
             for ip in rule.grants:
-                print ip
+                print("\t {}").format(ip)
     return
 
 
@@ -190,7 +190,7 @@ if __name__ == "__main__":
                 print("{} NOT found in {}, nothing further to do.").format(my_ip_address, my_security_group)
 
         else:
-            print "Niks te doen."
+            print("Niks te doen.")
     except KeyboardInterrupt:
         sys.exit(0)
     except Exception, e:
