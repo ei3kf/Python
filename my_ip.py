@@ -140,7 +140,7 @@ if __name__ == "__main__":
     parser.add_argument(
        "--ip",
         help="Display my IP Address.",
-        type=str,
+        action='store_true',
         default=False)
 
     add_delete = parser.add_mutually_exclusive_group()
