@@ -24,7 +24,7 @@ class ReverseString(object):
     	"""
     	self.input_length = len(self.input_string) - 1
     	for count in range(self.input_length, -1, -1):
-			self.output_string = self.output_string + self.input_string[count]
+            self.output_string = self.output_string + self.input_string[count]
 
 if __name__ == "__main__":
 
