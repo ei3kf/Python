@@ -1,21 +1,12 @@
 #!/usr/bin/python
 
 """
-<<<<<<< HEAD
     mijn_ip.py
     - display my current IP address
     - show the current IP addresses in the given AWS Security Group
     - check to see if my current IP is in the given AWS Security Group
     - Add my current IP to the given AWS Security Group
     - Delete my current IP from the given AWS Security Group
-=======
-    mijn_ip.py 
-	- display my current IP address
-	- show the current IP addresses in the given AWS Security Group
-	- check to see if my current IP is in the given AWS Security Group
-	- Add my current IP to the given AWS Security Group
-	- Delete my current IP from the given AWS Security Group
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
 """
 
 import urllib
@@ -24,17 +15,13 @@ import sys
 import boto.ec2
 import argparse
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
 class MijnIp(object):
     """
      MijnIp - class to find and return an IP address
     """
     def __init__(self, url):
         self.url = url
-<<<<<<< HEAD
         self.http_response = None
         self.response_ip = None
 
@@ -42,15 +29,6 @@ class MijnIp(object):
         """
           read_url() - this function will access a URL and return the response.
         """
-=======
-	self.http_response = None
-	self.response_ip = None
-
-    def read_url(self):
-        """     
-          read_url() - this function will access a URL and return the response.
-        """     
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
         self.http_response = urllib.urlopen(self.url).read()
 
     def return_ip(self):
@@ -72,22 +50,15 @@ class SecurityGroups(object):
         self.ip_list = []
 
     def security_group_rules(self):
-<<<<<<< HEAD
         """
         creates a list of IPs in given security group.
         """
-=======
-	"""
-	creates a list of IPs in given security group.	
-	"""
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
         for self.sg in self.ec2_security_group:
             for self.rule in self.sg.rules:
                 for self.ip in self.rule.grants:
                     self.ip_list.append(self.ip)
 
     def security_group_add_rule(self, my_ip):
-<<<<<<< HEAD
         """
         Add a rule to the given security group, allowing all traffic from given IP.
         """
@@ -96,21 +67,10 @@ class SecurityGroups(object):
             group_id=self.security_group,
             ip_protocol="-1",
             from_port=-1,
-=======
-	"""
-	Add a rule to the given security group, allowing all traffic from given IP.
-	"""
-	self.my_ip = my_ip
-	self.add_rule = self.ec2.authorize_security_group(
-            group_id=self.security_group,
-            ip_protocol="-1",
-	    from_port=-1,
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
             to_port=-1,
             cidr_ip=self.my_ip)
 
     def security_group_delete_rule(self, my_ip):
-<<<<<<< HEAD
         """
         Delete the rule that contains the given IP.
         """
@@ -121,18 +81,6 @@ class SecurityGroups(object):
             from_port=-1,
             to_port=-1,
             cidr_ip=self.my_ip)
-=======
-	"""
-	Delete the rule that contains the given IP.
-	"""
-	self.my_ip = my_ip
-        self.delete_rule = self.ec2.revoke_security_group(
-        group_id=self.security_group,
-        ip_protocol="-1",
-        from_port=-1,
-        to_port=-1,
-        cidr_ip=self.my_ip)
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
 
 
 def get_my_ip():
@@ -168,42 +116,22 @@ def check_my_sg():
 
 def add_my_ip(my_ip):
     """
-<<<<<<< HEAD
     add the IP
     """
     my_security_group = SecurityGroups(args.region, args.sg)
     my_security_group.security_group_add_rule(my_ip)
-=======
-	add the IP
-    """
-    my_security_group = SecurityGroups(args.region, args.sg)
-    my_security_group.security_group_add_rule(my_ip)
-    return
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
 
 
 def delete_my_ip():
     """
-<<<<<<< HEAD
     delete the IP
     """
     my_security_group = SecurityGroups(args.region, args.sg)
     my_security_group.security_group_delete_rule(my_ip)
-=======
-	delete the IP
-    """
-    my_security_group = SecurityGroups(args.region, args.sg)
-    my_security_group.security_group_delete_rule(my_ip)
-    return
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
 
 
 if __name__ == "__main__":
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--region",
@@ -257,7 +185,6 @@ if __name__ == "__main__":
 
     url = args.url
 
-<<<<<<< HEAD
     try:
         if args.check:
             if not args.region:
@@ -274,30 +201,11 @@ if __name__ == "__main__":
                 print("IP {} NOT found.").format(my_ip)
         elif args.show:
             if not args.region:
-=======
-
-    try:
-        if args.check:
-	    if not args.region:
-                print("AWS Region needs to be specified.")
-            elif not args.sg:
-                print("AWS security group needs to be specified.")
-            else:
-                my_ip = get_my_ip()
-                print("Checking for IP address {} in security group {}").format(my_ip, args.sg)
-                if check_my_sg():
-                    print("IP {} found.").format(my_ip)
-		else: 
-		    print("IP {} not found.").format(my_ip)
-        elif args.show:
-	    if not args.region:
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
                 print("AWS Region needs to be specified.")
             elif not args.sg:
                 print("AWS security group needs to be specified.")
             else:
                 print("Listing IP addresses in security group {}").format(args.sg)
-<<<<<<< HEAD
                 for ip in list_my_sg():
                     print ip
         elif args.ip:
@@ -319,32 +227,10 @@ if __name__ == "__main__":
                     add_my_ip(my_ip)
         elif args.delete:
             if not args.region:
-=======
-	        for ip in list_my_sg():
-	            print ip
-        elif args.ip:
-	    my_ip = get_my_ip()
-            print("Your IP address is {}").format(my_ip)
-	elif args.add:
-	    if not args.region:
                 print("AWS Region needs to be specified.")
             elif not args.sg:
                 print("AWS security group needs to be specified.")
             else:
-                my_ip = get_my_ip()
-	        if check_my_sg():
-	            print("IP {} already in security group {}").format(my_ip, args.sg)
-	        else:
-	            print("IP {} adding to security group {}").format(my_ip, args.sg)
-		    add_my_ip(my_ip)
-        elif args.delete:
-	    if not args.region:
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
-                print("AWS Region needs to be specified.")
-            elif not args.sg:
-                print("AWS security group needs to be specified.")
-            else:
-<<<<<<< HEAD
                my_ip = get_my_ip()
                if check_my_sg():
                     print("IP {} deleting from security group {}").format(my_ip, args.sg)
@@ -354,22 +240,8 @@ if __name__ == "__main__":
         else:
             my_ip = get_my_ip()
             print("Your IP address is {}").format(my_ip)
-=======
-                my_ip = get_my_ip()
-	        if check_my_sg():
-	            print("IP {} deleting from security group {}").format(my_ip, args.sg)
-	            delete_my_ip()
-		else:
-	            print("IP {} not found in security group {}").format(my_ip, args.sg)
-        else:
-            print("Niks te doen.")
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
     except KeyboardInterrupt:
         sys.exit(0)
     except Exception, e:
         str(e)
         print("Computer says: {}").format(e)
-<<<<<<< HEAD
-=======
-
->>>>>>> 31d23da6e8a3dec9299068cbfb62912578e40786
