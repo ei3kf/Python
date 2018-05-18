@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+
+"""
+Print per AWS region, any security group containing a rule allowing "0.0.0.0/0"
+"""
+
+import boto3
+
+def get_aws_regions():
+    regions = []
+    aws_regions = boto3.client('ec2').describe_regions()
+    for aws_region in aws_regions['Regions']:
+        regions.append(aws_region['RegionName'])
+    return regions
+
+
+def connect_to_ec2(region):
+	client = boto3.client('ec2', region)
+	return client
+
+
+def find_open_sg(client):
+	response = client.describe_security_groups(
+    Filters=[
+        {
+            'Name': 'ip-permission.cidr',
+            'Values': [
+                '0.0.0.0/0',
+            ]
+        }
+    ]
+	)	
+	return response
+
+if __name__ == "__main__":
+	aws_regions = get_aws_regions()
+	for region in aws_regions:
+		client = connect_to_ec2(region)
+		for security_groups in find_open_sg(client)['SecurityGroups']:
+			print("{} {} {}").format(region, security_groups['GroupId'], security_groups['GroupName'])
+			for rules in security_groups['IpPermissions']:
+				if "0.0.0.0/0" in str(rules):
+					print("  {}").format(rules)
