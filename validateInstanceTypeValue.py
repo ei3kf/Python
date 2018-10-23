@@ -18,6 +18,6 @@ try:
         print(modifiedInstanceTypeValue)
         time.sleep(5)
 except Exception as e:
-    msg = describe_instance_attribute() has encountered an exception %s , error --> %s ' % (i, str(e))
+    msg = "describe_instance_attribute() has encountered an exception %s , error --> %s ' % (i, str(e))
     print(msg)
         
