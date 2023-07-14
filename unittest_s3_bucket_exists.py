@@ -13,7 +13,7 @@ class S3BucketExistsTest(unittest.TestCase):
     def setUp(self):                                
         self.session = boto3.Session(profile_name="REPLACE_WITH_YOUR_PROFILE")
         self.s3_client = self.session.client('s3')
-        self.bucket_name = os.environ['bucket_name']
+        self.bucket_name = os.environ['BUCKET']
 
     def test_bucket_exists_assert_true(self):
         response = self.s3_client.list_buckets()
