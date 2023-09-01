@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 """
     mijn_ip.py
@@ -194,23 +194,23 @@ if __name__ == "__main__":
                 print("AWS security group needs to be specified.")
 		sys.exit(1)
             my_ip = get_my_ip()
-            print("Checking for IP address {} in security group {}").format(my_ip, args.sg)
+            print(f"Checking for IP address {my_ip} in security group {args.sg}")
             if check_my_sg():
-                print("IP {} found.").format(my_ip)
+                print(f"IP {my_ip} found.")
             else:
-                print("IP {} NOT found.").format(my_ip)
+                print(f"IP {my_ip} NOT found.")
         elif args.show:
             if not args.region:
                 print("AWS Region needs to be specified.")
             elif not args.sg:
                 print("AWS security group needs to be specified.")
             else:
-                print("Listing IP addresses in security group {}").format(args.sg)
+                print(f"Listing IP addresses in security group {args.sg}")
                 for ip in list_my_sg():
-                    print ip
+                    print(ip)
         elif args.ip:
             my_ip = get_my_ip()
-            print("Your IP address is {}").format(my_ip)
+            print(f"Your IP address is {my_ip}")
         elif args.add:
             if not args.region:
                 print("AWS Region needs to be specified.")
@@ -221,9 +221,9 @@ if __name__ == "__main__":
             else:
                 my_ip = get_my_ip()
                 if check_my_sg():
-                    print("IP {} already in security group {}").format(my_ip, args.sg)
+                    print(f"IP {my_ip} already in security group {args.sg}")
                 else:
-                    print("IP {} adding to security group {}").format(my_ip, args.sg)
+                    print(f"IP {my_ip} adding to security group {args.sg}")
                     add_my_ip(my_ip)
         elif args.delete:
             if not args.region:
@@ -233,15 +233,15 @@ if __name__ == "__main__":
             else:
                my_ip = get_my_ip()
                if check_my_sg():
-                    print("IP {} deleting from security group {}").format(my_ip, args.sg)
+                    print(f"IP {my_ip} deleting from security group {args.sg}")
                     delete_my_ip()
                else:
-                    print("IP {} not found in security group {}").format(my_ip, args.sg)
+                    print(f"IP {my_ip} not found in security group {args.sg}")
         else:
             my_ip = get_my_ip()
-            print("Your IP address is {}").format(my_ip)
+            print(f"Your IP address is {my_ip}")
     except KeyboardInterrupt:
         sys.exit(0)
     except Exception, e:
         str(e)
-        print("Computer says: {}").format(e)
+        print(f"Computer says: {e}")
