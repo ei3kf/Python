@@ -24,7 +24,7 @@ class BubbleSort:
 
 
 if __name__ == "__main__":
-    input_array = [64, 34, 25, 12, 22, 11, 90]
+    input_array = [64, 34, 25, 12, 22, 11, 90, 128]
     bubble_sort = BubbleSort(input_array)
     print("Original Array:")
     bubble_sort.display()
