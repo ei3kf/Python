@@ -1,27 +1,4 @@
 #!/usr/bin/env python3
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
 
 class BubbleSort:
     def __init__(self, arr):
